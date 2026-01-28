@@ -1,0 +1,1 @@
+{"name":"Local: cvt","url":"f:\\competitive programming\\cvt.cpp","tests":[{"id":1756365090893,"input":"8\n\nstraight 5\n\nright 2\n\nright 7\n\nright 5\n\nstraight 1\n\nleft 2\n\nleft 3\n\nright 4\n\n0 0\n\n12 14","output":"No"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"f:\\competitive programming\\cvt.cpp","group":"local","local":true}

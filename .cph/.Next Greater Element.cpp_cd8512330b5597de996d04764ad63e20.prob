@@ -1,0 +1,1 @@
+{"name":"Local: Next Greater Element","url":"f:\\competitive programming\\Next Greater Element.cpp","tests":[{"id":1769492392503,"input":"5\n1 3 2 5 4","output":"5 4"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"f:\\competitive programming\\Next Greater Element.cpp","group":"local","local":true}

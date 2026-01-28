@@ -1,0 +1,1 @@
+{"name":"Local: modified_binary_search","url":"f:\\competitive programming\\modified_binary_search.cpp","tests":[{"id":1753761569392,"input":"10 7\n5 32 9 18 17 15 20 22 24 7","output":"9"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"f:\\competitive programming\\modified_binary_search.cpp","group":"local","local":true}
