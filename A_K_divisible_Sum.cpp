@@ -60,73 +60,45 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-
-void bfs(vector<vector<int>>& adj, int start, vector<int>& path, bool &found, vector<bool>& visited) {
-    int n = adj.size();
-    vector<int> parent(n, -1);
-    queue<int> q;
-    q.push(start);
-    visited[start] = true;
-
-    while(!q.empty() && !found) {
-       
-        int u = q.front(); q.pop();
-        debug(u);
-        for(int v : adj[u]) {
-            if(!visited[v]) {
-                visited[v] = true;
-                parent[v] = u;
-                q.push(v);
-            }
-            
-            else if(parent[u] != v) {
-                found = true;
-                debug(found);
-                int x = u;
-                path.push_back(x);
-                return;
-            }
-            
-        }
-    }
+bool check(int n,int k,int mid){
+    if(k%mid==n-1)return true;
+    return false;
 }
 
+// Solve function for each test case
 void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> adj(n);
-    for(int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        a--; b--; 
-        adj[a].pb(b);
-        adj[b].pb(a);
-    }
-
-    vector<bool> visited(n, false);
-    vector<int> path;
-    bool found = false;
-
-    for(int i = 0; i < n; i++) {
-        if(!visited[i]) {
-            bfs(adj, i, path, found, visited);
-            if(found) break; 
+    int n,k;
+    cin >> n>>k;
+    int l=1;
+    int r=k;
+    int ans=0;
+    while(l<=r){
+        
+        int mid=l+(r-l)/2;
+   
+        if(check(n,k,mid)){
+            
+            l=mid+1;
+            ans=mid;
+        }
+        else{
+            r=mid-1;
         }
     }
 
-
-    if(found) {
-        cout << path.size() << "\n";
-        for(int node : path) cout << node + 1 << " ";
-        cout << "\n";
-    } else {
-        cout << "IMPOSSIBLE\n";
-    }
+    cout<< ans<<endl;
 }
 
+// Main
 int32_t main() {
     fast_io;
+
     int T = 1;
-    while(T--) solve();
+     cin >> T; // Uncomment if multiple test cases
+
+    while (T--) {
+        solve();
+    }
+
     return 0;
 }

@@ -60,73 +60,58 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-
-void bfs(vector<vector<int>>& adj, int start, vector<int>& path, bool &found, vector<bool>& visited) {
-    int n = adj.size();
-    vector<int> parent(n, -1);
-    queue<int> q;
-    q.push(start);
-    visited[start] = true;
-
-    while(!q.empty() && !found) {
-       
-        int u = q.front(); q.pop();
-        debug(u);
-        for(int v : adj[u]) {
-            if(!visited[v]) {
-                visited[v] = true;
-                parent[v] = u;
-                q.push(v);
-            }
-            
-            else if(parent[u] != v) {
-                found = true;
-                debug(found);
-                int x = u;
-                path.push_back(x);
-                return;
-            }
-            
-        }
+int lowerBound(int a,vector<int>& arr){
+int l=0;int r=arr.size();
+while(l<r){
+    int mid=l+(r-l)/2;
+    if(arr[mid]>=a){
+        r=mid;
+    }
+    else{
+        l=mid+1;
     }
 }
+return l;
+}
+int upperbound(int a,vector<int>& arr){
+int l=0;int r=arr.size();
+while(l<r){
+    int mid=l+(r-l)/2;
+    if(arr[mid]>a){
+        r=mid;
+    }
+    else{
+        l=mid+1;
+    }
+}
+return l;
+}
 
+// Solve function for each test case
 void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> adj(n);
-    for(int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        a--; b--; 
-        adj[a].pb(b);
-        adj[b].pb(a);
-    }
+    int n,m;
+    cin >> n>>m;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
 
-    vector<bool> visited(n, false);
-    vector<int> path;
-    bool found = false;
-
-    for(int i = 0; i < n; i++) {
-        if(!visited[i]) {
-            bfs(adj, i, path, found, visited);
-            if(found) break; 
-        }
-    }
-
-
-    if(found) {
-        cout << path.size() << "\n";
-        for(int node : path) cout << node + 1 << " ";
-        cout << "\n";
-    } else {
-        cout << "IMPOSSIBLE\n";
+    while(m--){
+        int k;
+        cin>>k;
+        cout<<lowerBound(k,a)<<" ";
+        cout<<upperbound(k,a)<<endl;
     }
 }
 
+// Main
 int32_t main() {
     fast_io;
+
     int T = 1;
-    while(T--) solve();
+    // cin >> T; // Uncomment if multiple test cases
+
+    while (T--) {
+        solve();
+    }
+
     return 0;
 }

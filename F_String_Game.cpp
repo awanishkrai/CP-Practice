@@ -60,61 +60,58 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-class dsu{
-    public:
-    vector<int> parent,size,mn,mx;
-    dsu(int n){
-        parent.resize(n+1);
-        size.assign(n+1,1);
-        mn.resize(n+1);
-        mx.resize(n+1);
-        iota(parent.begin(),parent.end(),0);
-        iota(mn.begin(),mn.end(),0);
-        iota(mx.begin(),mx.end(),0);
+bool check(string s1,string s2,vector<int>a,int mid){
+    for(int i=0;i<mid;i++){
+        s1[a[i]]='*';
     }
-        int find(int u){
-            if(parent[u]==u)return u;
-            return parent[u]=find(parent[u]);
-        }
-        void makeunion(int u,int v){
-            u=find(u);
-            v=find(v);
-            if(u==v)return;
-            if(size[u]<size[v])swap(u,v);
-            parent[v]=u;
-            size[u]+=size[v];
-            mn[u]=min(mn[u],mn[v]);
-            mx[u]=max(mx[u],mx[v]);
-        }
-       tuple<int,int,int>getinf(int x){
-        x=find(x);
-        return {mn[x],mx[x],size[x]};
-       }
-    };
+  
+    int n=s1.size();
+    int b=s2.size();
+    int count=0;
+    for(int i=0;i<n;i++){
+        if(s1[i]==s2[count])count++;
+      
+        if(count==b)return true;
+    }
+    return false;
+
+}
 
 // Solve function for each test case
 void solve() {
-    int n,query;
-    cin >> n >>query;
-    dsu d(n);
+    string s1;
+    cin>>s1;
+    
+    string s2;
+    cin>>s2;
+    
+    int n=s1.size();
+    
+
     vector<int> a(n);
-    for(int i=0;i<query;i++){
-        string s;
-        int u,v,x;
-        cin>>s;
-        if(s=="union"){
-            cin>>u>>v;
-            d.makeunion(u,v);
+    for (auto &x : a) {
+        cin >> x;
+        x--;
+    }
+    int l=1;
+    int r=n;
+    int ans=0;
+    while(l<=r){
+        
+        int mid=l+(r-l)/2;
+   
+        if(check(s1,s2,a,mid)){
+            
+            l=mid+1;
+            ans=mid;
         }
         else{
-            cin>>x;
-            
-            auto[mn,mx,sz]=d.getinf(x);
-            cout<<mn<<" "<<mx<<" "<<sz<<" "<<endl;
+            r=mid-1;
         }
     }
 
-    
+    cout<< ans;
+
 }
 
 // Main

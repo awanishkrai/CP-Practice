@@ -61,72 +61,51 @@ int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
 
-void bfs(vector<vector<int>>& adj, int start, vector<int>& path, bool &found, vector<bool>& visited) {
-    int n = adj.size();
-    vector<int> parent(n, -1);
-    queue<int> q;
-    q.push(start);
-    visited[start] = true;
-
-    while(!q.empty() && !found) {
-       
-        int u = q.front(); q.pop();
-        debug(u);
-        for(int v : adj[u]) {
-            if(!visited[v]) {
-                visited[v] = true;
-                parent[v] = u;
-                q.push(v);
-            }
-            
-            else if(parent[u] != v) {
-                found = true;
-                debug(found);
-                int x = u;
-                path.push_back(x);
-                return;
-            }
-            
+void permutation(int i,vector<int>&arr,vector<vector<int>>&result,vector<int>ans,vector<bool>used){
+    int n=arr.size();
+    ans.push_back(arr[i]);
+    if(ans.size()==n){
+        result.push_back(ans);
+        return;
+    }
+    used[i]=true;
+    for(int j=0;j<n;j++){
+        if(!used[j]){
+            permutation(j,arr,result,ans,used);
         }
     }
 }
 
-void solve() {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<int>> adj(n);
-    for(int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        a--; b--; 
-        adj[a].pb(b);
-        adj[b].pb(a);
+void solve(){
+    int n;
+    cin>>n;
+    vector<int>a(n);
+    for(auto &x:a)cin>>x;
+    vector<vector<int>>result;
+    vector<int>ans;
+    vector<bool>used(n,false);
+    for(int i=0;i<n;i++){
+        permutation(i,a,result,ans,used);
     }
-
-    vector<bool> visited(n, false);
-    vector<int> path;
-    bool found = false;
-
-    for(int i = 0; i < n; i++) {
-        if(!visited[i]) {
-            bfs(adj, i, path, found, visited);
-            if(found) break; 
-        }
-    }
-
-
-    if(found) {
-        cout << path.size() << "\n";
-        for(int node : path) cout << node + 1 << " ";
-        cout << "\n";
-    } else {
-        cout << "IMPOSSIBLE\n";
+    
+    for(auto &perm:result){
+        for(int x:perm)cout<<x<<" ";
+        cout<<endl;
     }
 }
 
+
+
+// Main
 int32_t main() {
     fast_io;
+
     int T = 1;
-    while(T--) solve();
+    // cin >> T; // Uncomment if multiple test cases
+
+    while (T--) {
+        solve();
+    }
+
     return 0;
 }
