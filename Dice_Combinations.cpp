@@ -62,26 +62,39 @@ int mod_inv(int a, int m = MOD) {
 }
 vector<int>dp;
 
-int dice(int n){
-   for(int sum=1;sum<=n;sum++){
-    for(int j=1;j<=6;j++){
-        if(sum-j>=0){
-        dp[sum]+=dp[sum-j];
-        }
+// int dice(int n){
+//    for(int sum=1;sum<=n;sum++){
+//     for(int j=1;j<=6;j++){
+//         if(sum-j>=0){
+//         dp[sum]+=dp[sum-j];
+//         }
+//     }
+//    }
+//    return dp[n];
+// }
+int cs(int n,int sum,vector<int>&dp){
+    int result=0;
+    if(sum==n)return 1;
+    if(sum>n)return 0;
+    if(dp[sum]!=-1)return dp[sum];
+    for(int i=1;i<=6;i++){
+        result+=cs(n,sum+i,dp);
     }
-   }
-   return dp[n];
+    return dp[sum]=result;
+
 }
 // Solve function for each test case
 void solve() {
 
     int n;
     cin >> n;
-    int way=0;
-    dp.assign(n+1,0);
-    dp[0]=1;
-    int k=dice(n);
-    cout<<k<<endl;
+    vector<int>dp(n+1,-1);
+    // int way=0;
+    // dp.assign(n+1,0);
+    // dp[0]=1;
+    // int k=dice(n);
+    int ans=cs(n,0,dp);
+    cout<<ans<<endl;
 }
 
 // Main
