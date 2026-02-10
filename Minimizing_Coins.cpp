@@ -60,27 +60,29 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-int count(vector<int>coins,int n,int sum,int i){
-    if(i==coins.size())return 0;
-    if(sum==n) return 0;
-    int k=0;
-    int l=0;
-    if(k==sum)
+int count(vector<int>& coins, int n, int sum, int s){
+    if(s == sum) return 0;
+    if(s > sum) return INT_MAX;
 
+    int result = INT_MAX;
+
+    for(int i = 0; i < n; i++){
+        int sub = count(coins, n, sum, s + coins[i]);
+        if(sub != INT_MAX){
+            result = min(result, 1 + sub);
+        }
+    }
+    return result;
 }
+
 // Solve function for each test case
 void solve() {
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for (auto &x : a) cin >> x;
-
-    sort(all(a));
-    debug(a);
-
-    cout << "Sorted: ";
-    for (int x : a) cout << x << ' ';
-    cout << '\n';
+    int n,sum;
+    cin >> n>>sum;
+    vector<int>a(n);
+    for(auto&x:a)cin>>x;
+    cout<<count(a,n,sum,0);
+    
 }
 
 // Main

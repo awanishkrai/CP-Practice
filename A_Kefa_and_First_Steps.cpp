@@ -60,27 +60,40 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-int count_occ(string &s,int i,int c,vector<vector<int>>&dp){
+int count(vector<int>&arr,int i,vector<int>&dp){
+    if(i>=arr.size())return 0;
+    if(dp[i]!=-1)return dp[i];
     int ans=0;
-    if(c==3)return 1;
-    if(i==s.size())return 0;
-    if(dp[i][c]!=-1)return dp[i][c];
-    ans+=count_occ(s,i+1,c,dp);
-    if(s[i]=='Q' && (c==0 || c==2)){
-        ans+=count_occ(s,i+1,c+1,dp);
+    if(arr[i]>=arr[i-1]){
+        ans=max(ans,1+count(arr,i+1,dp));
     }
-    else if(s[i]=='A' && c==1){
-        ans+=count_occ(s,i+1,c+1,dp);
-    }
-    return dp[i][c]=ans;
+    return dp[i]=ans;
 }
 // Solve function for each test case
 void solve() {
-    string s;
-    cin>>s;
-    int k=s.length();
-    vector<vector<int>>dp(k+1,vector<int>(k+1,-1));
-    cout<<count_occ(s,0,0,dp);
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
+    vector<int>dp(n+1,-1);
+// int maxcount=0;
+// int count=1;
+// for(int i=1;i<n;i++){
+// if(a[i]>=a[i-1]){
+//     count++;
+// }
+// else{
+//     maxcount=max(maxcount,count);
+//     count=1;
+// }
+// }
+//   maxcount=max(maxcount,count);
+// cout<<maxcount<<endl;
+int mx=0;
+for(int i=1;i<n;i++){
+mx=max(mx,count(a,i,dp));
+}
+cout<<1+mx<<endl;
 }
 
 // Main

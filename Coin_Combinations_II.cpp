@@ -60,23 +60,33 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
+int ways(int i,int sum,vector<int>&coins,int s,vector<vector<int>>&dp){
+    if(s==sum)return 1;
+    int n=coins.size();
+    if(s>sum||i==n)return 0;
+    if(dp[i][s]!=-1)return dp[i][s];
+    int result=ways(i,sum,coins,s+coins[i],dp)+ways(i+1,sum,coins,s,dp);
+    return dp[i][s]= result%MOD;
+}
+
 void solve() {
     int n, k;
     cin >> n >> k;
     vector<int> coins(n);
     for (auto &x : coins) cin >> x;
 
-    vector<int> dp(k + 1, 0);
-    dp[0] = 1; 
+    vector<vector<int>>dp(n,vector<int>(k+1,-1));
+    cout<<ways(0,k,coins,0,dp);
+    // dp[0] = 1; 
 
     
-    for (int coin : coins) {
-        for (int sum = coin; sum <= k; sum++) {
-            dp[sum] = (dp[sum] + dp[sum - coin]) % MOD;
-        }
-    }
+    // for (int coin : coins) {
+    //     for (int sum = coin; sum <= k; sum++) {
+    //         dp[sum] = (dp[sum] + dp[sum - coin]) % MOD;
+    //     }
+    // }
 
-    cout << dp[k] << "\n";
+    // cout << dp[k] << "\n";
 }
 
 int32_t main() {

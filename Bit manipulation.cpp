@@ -60,27 +60,17 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-int count_occ(string &s,int i,int c,vector<vector<int>>&dp){
-    int ans=0;
-    if(c==3)return 1;
-    if(i==s.size())return 0;
-    if(dp[i][c]!=-1)return dp[i][c];
-    ans+=count_occ(s,i+1,c,dp);
-    if(s[i]=='Q' && (c==0 || c==2)){
-        ans+=count_occ(s,i+1,c+1,dp);
-    }
-    else if(s[i]=='A' && c==1){
-        ans+=count_occ(s,i+1,c+1,dp);
-    }
-    return dp[i][c]=ans;
-}
+
 // Solve function for each test case
 void solve() {
-    string s;
-    cin>>s;
-    int k=s.length();
-    vector<vector<int>>dp(k+1,vector<int>(k+1,-1));
-    cout<<count_occ(s,0,0,dp);
+    int n;
+    cin >> n;
+   int count=0;
+   while(n>0){
+    count++;
+    n=(n>>1);
+   }
+   cout<<count;
 }
 
 // Main
@@ -96,3 +86,4 @@ int32_t main() {
 
     return 0;
 }
+
