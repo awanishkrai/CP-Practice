@@ -61,49 +61,56 @@ int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
 
-
-
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+// Solve function for each test case
+void solve() {
+    int n,m;
+    cin >> n>>m;
+    vector<vector<int>> a(n,vector<int>(m,0));
+    for(auto &vec:a){
+        for(int &x:vec)cin>>x;
+    }
+    vector<vector<int>>maxl(n,vector<int>(m,0));
+    vector<vector<int>>maxr(n,vector<int>(m,0));
+    vector<vector<int>>maxt(n,vector<int>(m,0));
+    vector<vector<int>>maxb(n,vector<int>(m,0));
+    
+    for(int i=0;i<n;i++){
+         int maxele=0;
+        for(int j=0;j<m;j++){
+            maxele=max(maxele,a[i][j]);
+            maxl[i][j]=maxele;
         }
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
+    for(int i=0;i<n;i++){
+         int maxele=0;
+        for(int j=m-1;j>=0;j--){
+            maxele=max(maxele,a[i][j]);
+            maxr[i][j]=maxele;
+        }
     }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
+    for(int i=0;i<m;i++){
+        int maxele=0;
+        for(int j=0;j<n;j++){
+            maxele=max(maxele,a[j][i]);
+            maxt[j][i]=maxele;
+        }
     }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
+    for(int i=0;i<m;i++){
+        int maxele=0;
+        for(int j=n-1;j>=0;j--){
+            maxele=max(maxele,a[j][i]);
+            maxb[j][i]=maxele;
+        }
     }
-}
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
-    int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+    int sum=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            vector<int>finding={maxl[i][j],maxr[i][j],maxt[i][j],maxb[i][j]};
+            int k=*min_element(finding.begin(),finding.end());
+            sum+=k-min(k,a[i][j]);
+        }
+    }
+    cout<<sum<<endl;
 }
 
 // Main
@@ -111,7 +118,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+    cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

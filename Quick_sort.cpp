@@ -61,49 +61,37 @@ int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
 
-
-
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
+int partition(int l,int r,vector<int>&arr){
+    int pivot=arr[r];
+    int i=l-1;
+    for(int j=l;j<r;j++){
+        if(arr[j]<pivot){
             i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+            swap(arr[i],arr[j]);
         }
+
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
-    }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
-    }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
+    swap(arr[i+1],arr[r]);
+    return i+1;
 }
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
+void quicksort(int l,int r,vector<int>&arr){
+    if(l>=r){
+    return;
+    }
+    int pivot_index=partition(l,r,arr);
+    quicksort(l,pivot_index-1,arr);
+    quicksort(pivot_index+1,r,arr);
 }
-void solve(){
+// Solve function for each test case
+void solve() {
     int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+    cin >> n;
+    vector<int> a(n);
+    
+    for (auto &x : a) cin >> x;
+    debug(a);
+    quicksort(0,n-1,a);
+    debug(a);
 }
 
 // Main

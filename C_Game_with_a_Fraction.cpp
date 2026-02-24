@@ -60,50 +60,26 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
+// string result(int p,int q){
+//     if(p<0 || q<1)return "BOB"
+// }
 
+// Solve function for each test case
+void solve() {
+    long long p, q;
+    cin >> p >> q;
 
+    long long D = 3*p - 2*q;
 
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
-        }
+    if (D == 0) {
+        cout << "Bob\n";   // already winning position
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
+    else if (abs(D) % 2 == 1) {
+        cout << "Alice\n";
     }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
+    else {
+        cout << "Bob\n";
     }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
-}
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
-    int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
 }
 
 // Main
@@ -111,7 +87,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+    cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

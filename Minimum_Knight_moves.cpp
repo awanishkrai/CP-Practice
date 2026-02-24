@@ -60,50 +60,52 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-
-
-
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+bool isvalid(int i,int j){
+    if(i>0 && i<=8 && j>0 && j<=8)return true;
+    return false;
+}
+// Solve function for each test case
+void solve() {
+   string s1;
+   string s2;
+   cin>>s1>>s2;
+   int si=s1[0]-'a';
+   si++;
+   int sj=s1[1]-'0';
+   int ei=s2[0]-'a';
+   ei++;
+   int ej=s2[1]-'0';
+   vector<pair<int,int>>moves={
+    {1,2},
+    {-1,2},
+    {-1,-2},
+    {1,-2},
+    {2,1},
+    {-2,1},
+    {-2,-1},
+    {2,-1}
+   };
+   vector<vector<bool>>visited(9,vector<bool>(9,false));
+   queue<tuple<int,int,int>>q;
+   q.push({si,sj,0});
+   visited[si][sj]=true;
+   while(!q.empty()){
+    auto[ui,uj,dist]=q.front();
+    if(ui==ei && uj==ej){
+        cout<<dist<<endl;
+        break;
+    }
+    q.pop();
+    for(auto [nei1,nei2]:moves){
+        int vi=nei1+ui;
+        int vj=nei2+uj;
+        if(isvalid(vi,vj)&& !visited[vi][vj]){
+            visited[vi][vj]=true;
+            q.push({vi,vj,dist+1});
         }
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
-    }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
-    }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
-}
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
-    int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+   }
+   
 }
 
 // Main
@@ -111,7 +113,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+     cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

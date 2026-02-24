@@ -1,0 +1,1 @@
+{"name":"Local: merge_sort","url":"f:\\competitive programming\\merge_sort.cpp","tests":[{"id":1771832721185,"input":"5\n5 4 2 3 1","output":"1 2 3 4 5"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"f:\\competitive programming\\merge_sort.cpp","group":"local","local":true}

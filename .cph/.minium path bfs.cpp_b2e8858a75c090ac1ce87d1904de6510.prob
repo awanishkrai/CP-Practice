@@ -1,0 +1,1 @@
+{"name":"Local: minium path bfs","url":"f:\\competitive programming\\minium path bfs.cpp","tests":[{"id":1770964704788,"input":"4 4\n. # # .\n. . # .\n# . . .\n. . . .","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"f:\\competitive programming\\minium path bfs.cpp","group":"local","local":true}

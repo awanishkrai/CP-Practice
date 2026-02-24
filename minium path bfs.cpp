@@ -60,50 +60,85 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
+void bfs(vector<pair<int,int>>&moves,vector<vector<char>>path ){
+    int minmoves=INT_MAX;
 
+    int valid=0;
 
+    int n=path.size();
 
+    int m=path[0].size();
 
+    vector<vector<bool>>visited(n,vector<bool>(m,false));
 
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+    queue<pair<pair<int,int>,int>>q;
+
+    q.push({{0,0},0});
+
+    visited[0][0]=true;
+
+    while(!q.empty()){
+
+        auto grid=q.front();
+        q.pop();
+
+        int i=grid.first.first;
+
+        int j=grid.first.second;
+
+        int dist=grid.second;
+
+        for(int k=0;k<moves.size();k++){
+
+            int u=moves[k].first+i;
+
+            int v=moves[k].second+j;
+
+            if( ( u>=0)&& (u<n) &&(v>=0 && v<m) && path[u][v]!='#'){
+
+                if(u==n-1 && v==m-1){
+
+                    if(dist+1==minmoves)valid++;
+
+                    else if(dist+1<minmoves){
+
+                        minmoves=dist+1;
+
+                        valid=1;
+
+                    }
+                }
+                if(!visited[u][v]){
+
+                    visited[u][v]=true;
+                    
+                    q.push({{u,v},dist+1});
+
+                }
+            }
         }
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
-    }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
-    }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
+    cout<<"minstesps : "<<minmoves<<" valid: "<<valid;
 }
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
-    int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+// Solve function for each test case
+void solve() {
+    int n,m;
+    cin >> n>>m;
+    vector<vector<char>>path(n,vector<char>(m,'.'));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>path[i][j];
+        }
+    }
+
+
+   
+    vector<pair<int,int>>moves={
+        {0,1},{0,-1},{1,0},{-1,0}
+    };
+    bfs(moves,path);
+
+    
 }
 
 // Main

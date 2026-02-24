@@ -60,50 +60,65 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
+bool match(vector<int>&per,vector<int>&arr){
+    int n=per.size();
+    vector<int>narr(per.begin(),per.end());
+    for(int i=0;i<n;i++){
+        
+        if(arr[i]!=per[i]){
+    
+            if(i>0){
+                
+                if(arr[i]==per[i-1] || arr[i]==narr[i-1]){
+                    
+                    narr[i]=arr[i];
+                }
+            }
+             if(i<n-1){
+                if(per[i+1]==arr[i] || narr[i+1]==arr[i]){
+                    narr[i]=arr[i];
+                }
 
-
-
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+        }
         }
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
+    for(int i=n-1;i>=0;i--){
+            if(arr[i]!=per[i]){
+            if(i>0){
+                if(arr[i]==per[i-1] || arr[i]==narr[i-1]){
+                    narr[i]=arr[i];
+                }
+            }
+             if(i<n-1){
+                if(per[i+1]==arr[i] || arr[i]==narr[i+1]){
+                    narr[i]=arr[i];
+                }
+
+             }
+        }
     }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
+    
+    for(int i=0;i<n;i++){
+        if(arr[i]!=narr[i]){
+            return false;
+        }
     }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
+    return true;
 }
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
+// Solve function for each test case
+void solve() {
     int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+    cin >> n;
+    vector<int> a(n);
+    vector<int>p(n);
+    for (auto &x : p) cin >> x;
+    for (auto &x : a) cin >> x;
+   if(match(p,a)){
+    cout<<"YES"<<endl;
+   }
+   else{
+    cout<<"NO"<<endl;
+   }
 }
 
 // Main
@@ -111,7 +126,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+     cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

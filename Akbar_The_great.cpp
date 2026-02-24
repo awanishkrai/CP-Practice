@@ -61,49 +61,55 @@ int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
 
+// Solve function for each test case
+void solve() {
+    int v,e,sld;
+    cin>>v>>e>>sld;
+    vector<vector<int>>adj(v);
+    while(e--){
+        int a,b;
+        cin>>a>>b;
+        a--;
+        b--;
 
-
-
-
-void merge(int l,int r,int mid,vector<int>&arr){
-    int i=l;
-    int j=mid+1;
-    vector<int>temp;
-    while(i<=mid&&j<=r){
-        if(arr[i]<=arr[j]){
-            temp.push_back(arr[i]);
-            i++;
-        }else{
-            temp.push_back(arr[j]);
-            j++;
+        adj[b].push_back(a);
+        adj[a].push_back(b);
+    }
+    vector<bool>visited(v,false);
+    vector<pair<int,int>>persons;
+       queue<pair<int,int>>q;
+    while(sld--){
+        int s,p;
+        
+        cin>>s>>p;
+        s--;
+        persons.push_back({s,p});
+    }
+    for(int i=0;i<persons.size();i++){
+        q.push({persons[i].first,persons[i].second});
+        visited[persons[i].first]=true;
+    }
+    
+    
+ 
+    while(!q.empty()){
+        auto node=q.front();
+        q.pop();
+        int u=node.first;
+        int dist=node.second;
+        
+        for(int vi:adj[u]){
+            if(!visited[vi] && dist>0){
+                visited[vi]=true;
+                q.push({vi,dist-1});
+            }
         }
     }
-    while(i<=mid){
-        temp.push_back(arr[i]);
-        i++;
+    for(int i=0;i<v;i++){
+        if(visited[i]==false){cout<<"No"<<endl;
+        return;}
     }
-    while(j<=r){
-        temp.push_back(arr[j]);
-        j++;
-    }
-    for(int k=l;k<=r;k++){
-        arr[k]=temp[k-l];
-    }
-}
-void merge_sort(int l,int r,vector<int>&arr){
-    if(l>=r)return;
-    int mid=l+(r-l)/2;
-    merge_sort(l,mid,arr);
-    merge_sort(mid+1,r,arr);
-    merge(l,r,mid,arr);
-}
-void solve(){
-    int n;
-    cin>>n;
-    vector<int>a(n);
-    for(auto &x:a)cin>>x;
-    merge_sort(0,n-1,a);
-    for(auto x:a)cout<<x<<" ";
+    cout<<"Yes"<<endl;
 }
 
 // Main
@@ -111,7 +117,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+    cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

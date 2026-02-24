@@ -71,23 +71,27 @@ void bfs(vector<vector<int>>& adj, int start, vector<int>& path, bool &found, ve
     while(!q.empty() && !found) {
        
         int u = q.front(); q.pop();
+         
         debug(u);
         for(int v : adj[u]) {
+           
             if(!visited[v]) {
+               cout<<v<<" ";
                 visited[v] = true;
                 parent[v] = u;
                 q.push(v);
             }
-            
-            else if(parent[u] != v) {
+            else  if(parent[u] != v) {
                 found = true;
                 debug(found);
                 int x = u;
                 path.push_back(x);
                 return;
             }
+             
             
         }
+        cout<<endl;
     }
 }
 
@@ -113,7 +117,6 @@ void solve() {
             if(found) break; 
         }
     }
-
 
     if(found) {
         cout << path.size() << "\n";
