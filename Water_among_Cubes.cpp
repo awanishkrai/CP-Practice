@@ -65,51 +65,7 @@ int mod_inv(int a, int m = MOD) {
 void solve() {
     int n,m;
     cin >> n>>m;
-    vector<vector<int>> a(n,vector<int>(m,0));
-    for(auto &vec:a){
-        for(int &x:vec)cin>>x;
-    }
-    vector<vector<int>>maxl(n,vector<int>(m,0));
-    vector<vector<int>>maxr(n,vector<int>(m,0));
-    vector<vector<int>>maxt(n,vector<int>(m,0));
-    vector<vector<int>>maxb(n,vector<int>(m,0));
     
-    for(int i=0;i<n;i++){
-         int maxele=0;
-        for(int j=0;j<m;j++){
-            maxele=max(maxele,a[i][j]);
-            maxl[i][j]=maxele;
-        }
-    }
-    for(int i=0;i<n;i++){
-         int maxele=0;
-        for(int j=m-1;j>=0;j--){
-            maxele=max(maxele,a[i][j]);
-            maxr[i][j]=maxele;
-        }
-    }
-    for(int i=0;i<m;i++){
-        int maxele=0;
-        for(int j=0;j<n;j++){
-            maxele=max(maxele,a[j][i]);
-            maxt[j][i]=maxele;
-        }
-    }
-    for(int i=0;i<m;i++){
-        int maxele=0;
-        for(int j=n-1;j>=0;j--){
-            maxele=max(maxele,a[j][i]);
-            maxb[j][i]=maxele;
-        }
-    }
-    int sum=0;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            vector<int>finding={maxl[i][j],maxr[i][j],maxt[i][j],maxb[i][j]};
-            int k=*min_element(finding.begin(),finding.end());
-            sum+=k-min(k,a[i][j]);
-        }
-    }
     cout<<sum<<endl;
 }
 

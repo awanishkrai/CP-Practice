@@ -61,24 +61,35 @@ int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
 
+//reccur(i)=sum of money i can create if i take ith
+set<int>ans;
+vector<vector<bool>>visited;
+void recur(int i,int sum,vector<int>&arr){
+
+    if(i>=arr.size()){
+        if(sum<=0)return ;
+        ans.insert(sum);
+        return ;
+    }
+if(visited[i][sum]==true)return;
+visited[i][sum]=true;
+    recur(i+1,sum+arr[i],arr);
+    recur(i+1,sum,arr);
+    
+}
+
 // Solve function for each test case
 void solve() {
-    int n,m;
-    cin >> n>>m;
+    int n;
+    cin >> n;
     vector<int> a(n);
     for (auto &x : a) cin >> x;
-    sort(all(a));
-    vector<int>freq(n);
-    int sum=0;
-    for(int i=0;i<n;i++){
-        freq[i]=m-a[i];
-        sum+=a[i];
-    }
+    visited.assign(n,vector<bool>(1e5,false));
+    recur(0,0,a);
+cout<<ans.size()<<endl;
     
-    int min1=sum;
-   for(int i=0;i<m-a[0];i++){
-    
-   }
+    for (int x : ans) cout << x << ' ';
+    cout << '\n';
 }
 
 // Main
@@ -94,4 +105,3 @@ int32_t main() {
 
     return 0;
 }
-

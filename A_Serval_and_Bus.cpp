@@ -63,22 +63,31 @@ int mod_inv(int a, int m = MOD) {
 
 // Solve function for each test case
 void solve() {
-    int n,m;
-    cin >> n>>m;
-    vector<int> a(n);
-    for (auto &x : a) cin >> x;
-    sort(all(a));
-    vector<int>freq(n);
-    int sum=0;
-    for(int i=0;i<n;i++){
-        freq[i]=m-a[i];
-        sum+=a[i];
+    int n,t;
+    cin >> n>>t; priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>>pq;
+    int i=1;
+    while(n--){
+        int a,b;
+        cin>>a>>b;
+        
+        pq.push({a,b,i});
+        i++;
+        
     }
+   
     
-    int min1=sum;
-   for(int i=0;i<m-a[0];i++){
-    
-   }
+    while(!pq.empty()){
+        auto k=pq.top();
+        pq.pop();
+        if(k[0]>=t){
+        cout<<k[2]<<endl;
+        break;
+        }
+        else{
+            pq.push({k[0]+k[1],k[1],k[2]});
+        }
+    }
+
 }
 
 // Main
@@ -94,4 +103,3 @@ int32_t main() {
 
     return 0;
 }
-
