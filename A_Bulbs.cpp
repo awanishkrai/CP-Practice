@@ -60,31 +60,29 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-//recur(i,j)=minimal string that can be formed starting from i,j
-vector<vector<char>>memo;
-char recur(int i, int j, vector<string>& grid) {
-    
-    if(i >= grid.size() || j >= grid[0].size())
-        return '}';   
-
-    if(i == grid.size()-1 && j == grid[0].size()-1)
-        return memo[i][j]= grid[i][j];
-    if(memo[i][j]!='%')return memo[i][j];
-    char k = min(recur(i+1, j, grid), recur(i, j+1, grid));
-
-    return memo[i][j]= min(grid[i][j], k);
-}
 
 // Solve function for each test case
 void solve() {
-    int n;
-    cin >> n;
-    memo.assign(n,vector<char>(n,'%'));
-    vector<string>grid(n);
-    for(auto &x:grid){
-        cin>>x;
+    int n,m;
+    cin >> n>>m;
+    vector<bool>bulbs(m+1,false);
+    while(n--){
+        int xi;
+        cin>>xi;
+        while(xi--){
+            int bulb;
+            cin>>bulb;
+            bulbs[bulb]=true;
+        }
     }
-  cout<<recur(0,0,grid);
+   
+    for(int i=1;i<=m;i++){
+        if(bulbs[i]==false){
+            cout<<"NO"<<endl;
+            return;
+        }
+    }
+    cout<<"YES"<<endl;
     
 }
 

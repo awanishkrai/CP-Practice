@@ -60,32 +60,35 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-//recur(i,j)=minimal string that can be formed starting from i,j
-vector<vector<char>>memo;
-char recur(int i, int j, vector<string>& grid) {
-    
-    if(i >= grid.size() || j >= grid[0].size())
-        return '}';   
-
-    if(i == grid.size()-1 && j == grid[0].size()-1)
-        return memo[i][j]= grid[i][j];
-    if(memo[i][j]!='%')return memo[i][j];
-    char k = min(recur(i+1, j, grid), recur(i, j+1, grid));
-
-    return memo[i][j]= min(grid[i][j], k);
+vector<int>moves(int n){
+    return {n-1,2*n};
 }
-
 // Solve function for each test case
 void solve() {
-    int n;
-    cin >> n;
-    memo.assign(n,vector<char>(n,'%'));
-    vector<string>grid(n);
-    for(auto &x:grid){
-        cin>>x;
+    int n,m;
+    cin >> n>>m;
+    int k=2*m+n;
+    vector<int>dist(2*m+n+1,INT_MAX);
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+    pq.push({0,n});
+    dist[n]=0;
+    while(!pq.empty()){
+        auto[dis,node]=pq.top();
+       
+        pq.pop();
+        if(node==m){
+            cout<<dis<<endl;
+            break;
+        }
+        vector<int>mov=moves(node);
+        for(int x:mov){
+            if(x<=k && x>=0 && dist[x]>dis+1 ){
+                dist[x]=dis+1;
+                pq.push({dis+1,x});
+            }
+        }
+        
     }
-  cout<<recur(0,0,grid);
-    
 }
 
 // Main

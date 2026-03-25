@@ -67,16 +67,23 @@ void solve() {
     cin >>n>>ti;
     vector<int> a(n);
     for (auto &x : a) cin >> x;
-int count=0;
-    sort(all(a));
+int maxlen=0;
+int l=0;
+int r=0;
+while(l<=r && r<n){
+    
+    while(ti-a[r]<0){
+        ti+=a[l];
+        l++;
+     }
+     
+    maxlen=max(maxlen,(r-l+1));
+    ti-=a[r];
+    r++;
 
-    for (int x : a) {
-        if(ti-x<0){cout<<count;
-        return;}
-        count++;
-        ti-=x;
-    }
-    cout << count<<'\n';
+
+}
+cout<<maxlen<<endl;
 }
 
 // Main

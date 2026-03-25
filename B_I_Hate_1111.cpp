@@ -60,32 +60,38 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-//recur(i,j)=minimal string that can be formed starting from i,j
-vector<vector<char>>memo;
-char recur(int i, int j, vector<string>& grid) {
-    
-    if(i >= grid.size() || j >= grid[0].size())
-        return '}';   
+// vector<int>memo;
+// bool recur(int num,int &target,int &limit){
+//     if(num==target)return true;
+//     if(num>target)return false;
+//     if(memo[num]!=-1)return memo[num];
+//     int k=1;
+//     bool ans=false;
+//     for(int i=2;i<=limit;i++){
+//         k*=10;
+//         k++;
+//        ans=ans||recur(num+k,target,limit);
+//     }
+//     return memo[num]=ans;
 
-    if(i == grid.size()-1 && j == grid[0].size()-1)
-        return memo[i][j]= grid[i][j];
-    if(memo[i][j]!='%')return memo[i][j];
-    char k = min(recur(i+1, j, grid), recur(i, j+1, grid));
-
-    return memo[i][j]= min(grid[i][j], k);
-}
+// }
 
 // Solve function for each test case
 void solve() {
     int n;
     cin >> n;
-    memo.assign(n,vector<char>(n,'%'));
-    vector<string>grid(n);
-    for(auto &x:grid){
-        cin>>x;
-    }
-  cout<<recur(0,0,grid);
-    
+//    string s=to_string(n);
+//    int k=s.length();
+//    memo.assign(n+1,-1);
+//    if(recur(0,n,k)){
+//     cout<<"YES"<<endl;
+//    }
+//    else{
+//     cout<<"NO"<<endl;
+//    }
+int b=n%11;
+if(n-111*b>=0)cout<<"YES"<<endl;
+else cout<<"NO"<<endl;
 }
 
 // Main
@@ -93,7 +99,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+     cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

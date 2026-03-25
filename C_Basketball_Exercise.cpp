@@ -60,32 +60,33 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-//recur(i,j)=minimal string that can be formed starting from i,j
-vector<vector<char>>memo;
-char recur(int i, int j, vector<string>& grid) {
-    
-    if(i >= grid.size() || j >= grid[0].size())
-        return '}';   
-
-    if(i == grid.size()-1 && j == grid[0].size()-1)
-        return memo[i][j]= grid[i][j];
-    if(memo[i][j]!='%')return memo[i][j];
-    char k = min(recur(i+1, j, grid), recur(i, j+1, grid));
-
-    return memo[i][j]= min(grid[i][j], k);
+//dp[index][lastChoosenRow]=maximum total height of the team ending at index;
+vector<vector<int>>dp;
+int recur(int index,int lastChoosenRow,vector<int>&row1,vector<int>&row2){
+    int last=row1.size();
+    if(index == last) return 0;
+    if(dp[index][lastChoosenRow] != -1) return dp[index][lastChoosenRow];
+    if(lastChoosenRow==0){
+        return dp[index][lastChoosenRow]=max((row1[index]+recur(index+1 ,1 ,row1, row2)),max((row2[index]+recur(index+1,2,row1,row2)),recur(index+1,0,row1,row2)));
+    }
+    else if(lastChoosenRow==1){
+        return dp[index][lastChoosenRow]=max((row2[index]+recur(index+1,2,row1,row2)),recur(index+1,0,row1,row2));
+    }
+    else if(lastChoosenRow==2){
+         return dp[index][lastChoosenRow]=max((row1[index]+recur(index+1,1,row1,row2)),recur(index+1,0,row1,row2));
 }
-
+return dp[index][lastChoosenRow];
+}
 // Solve function for each test case
 void solve() {
     int n;
     cin >> n;
-    memo.assign(n,vector<char>(n,'%'));
-    vector<string>grid(n);
-    for(auto &x:grid){
-        cin>>x;
-    }
-  cout<<recur(0,0,grid);
-    
+    vector<int> row1(n),row2(n);
+
+    for (auto &x : row1) cin >> x;
+    for (auto &x : row2) cin >> x;
+    dp.assign(n+1,vector<int>(3,-1));
+    cout<<recur(0,0,row1,row2);
 }
 
 // Main

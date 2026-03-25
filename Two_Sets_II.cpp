@@ -60,32 +60,43 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-//recur(i,j)=minimal string that can be formed starting from i,j
-vector<vector<char>>memo;
-char recur(int i, int j, vector<string>& grid) {
-    
-    if(i >= grid.size() || j >= grid[0].size())
-        return '}';   
+//recur(i,sum)= no of ways to reach sum from i
 
-    if(i == grid.size()-1 && j == grid[0].size()-1)
-        return memo[i][j]= grid[i][j];
-    if(memo[i][j]!='%')return memo[i][j];
-    char k = min(recur(i+1, j, grid), recur(i, j+1, grid));
+vector<vector<int>> memo;
 
-    return memo[i][j]= min(grid[i][j], k);
+int recur(int i,int sum,int n){
+    if(sum < 0) return 0;
+    if(sum == 0) return 1;
+    if(i > n) return 0;
+
+    if(memo[i][sum] != -1) return memo[i][sum];
+
+    return memo[i][sum] =
+        (recur(i+1,sum-i,n)%MOD +
+         recur(i+1,sum,n)%MOD) % MOD;
 }
 
-// Solve function for each test case
 void solve() {
+
     int n;
     cin >> n;
-    memo.assign(n,vector<char>(n,'%'));
-    vector<string>grid(n);
-    for(auto &x:grid){
-        cin>>x;
+
+    int sum = n*(n+1)/2;
+
+    if(sum % 2){
+        cout << 0;
+        return;
     }
-  cout<<recur(0,0,grid);
-    
+
+    int k = sum/2;
+
+    memo.assign(n+2, vector<int>(k+1,-1));
+
+    long long ways = recur(1,k,n);
+
+    long long inv2 = 500000004; // modular inverse of 2
+
+    cout << (ways * inv2) % MOD;
 }
 
 // Main
