@@ -60,68 +60,37 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-vector<int>ans;
-void dfs(int u,vector<int>&parent,vector<vector<int>>&adj,bool &found){
-    if(found)return;
-    for(int v:adj[u]){
-        if(found)return;
-        if(parent[v]==-1){
-            parent[v]=u;
-         dfs(v,parent,adj,found);
-        }else{
-            if(parent[u]!=v){
-                
-                ans.pb(v+1);
-            
-                //paath construction
-                int x=u;
-                while(x!=v){
-                    
-                    ans.pb(x+1);
-                    x=parent[x];
-                    
-                }
-                ans.pb(v+1);
-                found=true;
-                return;
-            }
-            
-        }
-    }
-}
+
 // Solve function for each test case
+#include <bits/stdc++.h>
+using namespace std;
+
 void solve() {
-    int vertices,edges;
-    cin>>vertices>>edges;
-    vector<vector<int>>adj(vertices);
-    for(int i=0;i<edges;i++){
-        int v1,v2;
-        cin>>v1>>v2;
-        //converting to 0 based indexing;
-        v1--;
-        v2--;
-        adj[v1].pb(v2);
-        adj[v2].pb(v1);
-    
+    int n;
+    cin >> n;
+    vector<int> a(n), b(n);
+    for (int &x : a) cin >> x;
+    for (int &x : b) cin >> x;
 
-    }
-    vector<int>parent(vertices,-1);
-    bool found=false;
-    for(int i=0;i<vertices;i++){
-        if(!found && parent[i]==-1){
-            parent[i]=i;
-        dfs(i,parent,adj,found);
-        
+    vector<int> c(n);
+    for (int i = 0; i < n; i++) c[i] = a[i] - b[i];
+
+    sort(c.begin(), c.end());
+
+    long long total = 0;
+    int l = 0, r = n - 1;
+
+    while (l < r) {
+        if (c[l] + c[r] > 0) {
+            // All pairs (l, l+1 ... r) are valid
+            total += r - l;
+            r--;
+        } else {
+            l++;
         }
     }
 
-        if(ans.size()==0)cout<< "IMPOSSIBLE";
-        else{
-            cout<<ans.size()<<endl;
-            for(int x:ans){
-                cout<<x<<" ";
-            }
-        }
+    cout << total << "\n";
 }
 
 // Main

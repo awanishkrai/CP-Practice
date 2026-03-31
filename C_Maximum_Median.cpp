@@ -60,68 +60,53 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-vector<int>ans;
-void dfs(int u,vector<int>&parent,vector<vector<int>>&adj,bool &found){
-    if(found)return;
-    for(int v:adj[u]){
-        if(found)return;
-        if(parent[v]==-1){
-            parent[v]=u;
-         dfs(v,parent,adj,found);
-        }else{
-            if(parent[u]!=v){
-                
-                ans.pb(v+1);
-            
-                //paath construction
-                int x=u;
-                while(x!=v){
-                    
-                    ans.pb(x+1);
-                    x=parent[x];
-                    
-                }
-                ans.pb(v+1);
-                found=true;
-                return;
-            }
-            
-        }
-    }
-}
+
 // Solve function for each test case
 void solve() {
-    int vertices,edges;
-    cin>>vertices>>edges;
-    vector<vector<int>>adj(vertices);
-    for(int i=0;i<edges;i++){
-        int v1,v2;
-        cin>>v1>>v2;
-        //converting to 0 based indexing;
-        v1--;
-        v2--;
-        adj[v1].pb(v2);
-        adj[v2].pb(v1);
-    
+    int n,k;
+    cin >> n >>k;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
 
-    }
-    vector<int>parent(vertices,-1);
-    bool found=false;
-    for(int i=0;i<vertices;i++){
-        if(!found && parent[i]==-1){
-            parent[i]=i;
-        dfs(i,parent,adj,found);
+    sort(all(a));
+    int mid=(n/2);
+    int cost=0;
+    int max_median =a[mid];
+    int r=mid+1;
+
+    while(r<n && cost<k){
+        int dif=r-mid;
+        int temp_cost=dif*(a[r]-a[r-1]);
+        if(cost+temp_cost<k){
+            cost+=temp_cost;
+            r++;
+        }
+        if(cost+temp_cost==k){
+            cost+=temp_cost;
+            break;
+        }
+        if(cost+temp_cost>k){
         
+            break;
         }
     }
+   
+    k-=cost;
+    int ans=0;
+    if(r<n){
+        ans=a[r];
+    }
+    else{
+        r--;
+        ans=a[r];
+    }
 
-        if(ans.size()==0)cout<< "IMPOSSIBLE";
-        else{
-            cout<<ans.size()<<endl;
-            for(int x:ans){
-                cout<<x<<" ";
-            }
-        }
+    if(r==n-1 && k>0){
+        int renge=n-mid;
+        debug(renge);
+        ans+=k/(renge);
+    }
+    cout<<ans<<endl;
 }
 
 // Main

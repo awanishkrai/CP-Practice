@@ -60,68 +60,41 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-vector<int>ans;
-void dfs(int u,vector<int>&parent,vector<vector<int>>&adj,bool &found){
-    if(found)return;
-    for(int v:adj[u]){
-        if(found)return;
-        if(parent[v]==-1){
-            parent[v]=u;
-         dfs(v,parent,adj,found);
-        }else{
-            if(parent[u]!=v){
-                
-                ans.pb(v+1);
-            
-                //paath construction
-                int x=u;
-                while(x!=v){
-                    
-                    ans.pb(x+1);
-                    x=parent[x];
-                    
-                }
-                ans.pb(v+1);
-                found=true;
-                return;
-            }
-            
-        }
-    }
-}
+
 // Solve function for each test case
 void solve() {
-    int vertices,edges;
-    cin>>vertices>>edges;
-    vector<vector<int>>adj(vertices);
-    for(int i=0;i<edges;i++){
-        int v1,v2;
-        cin>>v1>>v2;
-        //converting to 0 based indexing;
-        v1--;
-        v2--;
-        adj[v1].pb(v2);
-        adj[v2].pb(v1);
-    
-
+    int n,k;
+    cin >> n>>k;
+    vector<int> a(n);
+    int ind=0;
+    for (auto &x : a) cin >> x;
+    int l=0;
+    int r=0;
+    int minheight=INT_MAX;
+    int sum=0;
+    while(r<k){
+        sum+=a[r];
+        r++;
     }
-    vector<int>parent(vertices,-1);
-    bool found=false;
-    for(int i=0;i<vertices;i++){
-        if(!found && parent[i]==-1){
-            parent[i]=i;
-        dfs(i,parent,adj,found);
-        
+    while(r<n){
+        //minheight=min(sum,minheight);
+        if(minheight>sum){
+            // debug(l);
+            // debug(r);
+            minheight=sum;
+            ind=l;
+            //debug(sum);
+        }
+        sum=sum-a[l];
+        l++;
+        if(r<n){
+        sum=sum+a[r];
+        r++;
+
         }
     }
+    cout<<ind+1<<endl;
 
-        if(ans.size()==0)cout<< "IMPOSSIBLE";
-        else{
-            cout<<ans.size()<<endl;
-            for(int x:ans){
-                cout<<x<<" ";
-            }
-        }
 }
 
 // Main
