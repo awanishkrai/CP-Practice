@@ -60,71 +60,29 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
-    int turns=v-1;
-    vector<int>dist(v,INF);
-    dist[src]=0;
-    while(turns--){
-        for(int i=0;i<v;i++){
-            for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
-                }
-            }
-        }
-    }
-    int found=false;
-    int x=-1;
-    for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
-            }
-    }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
-        }
-    }
-    else{
-        cout<<"NO"<<endl;
-    }
-    return found;
-}
+
 // Solve function for each test case
 void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
+    int n,m;
+    cin >> n>>m;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
+    int count=1;
+    int maxval=1;
+    for(int i=1;i<n;i++){
+      if(a[i]==a[i-1]){
+        count++;
+        
+        maxval=max(maxval,count);
+      }
+      else{
+        
+        maxval=max(maxval,count);
+        count=1;
+      }
     }
-    cycle(v,adj,0);
+   
+    (maxval>=m)?cout<<"NO"<<endl:cout<<"YES"<<endl;
 }
 
 // Main
@@ -132,7 +90,7 @@ int32_t main() {
     fast_io;
 
     int T = 1;
-    // cin >> T; // Uncomment if multiple test cases
+    cin >> T; // Uncomment if multiple test cases
 
     while (T--) {
         solve();

@@ -60,71 +60,50 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
+void bellmenFord(int v,vector<vector<pair<int,int>>>&adj,int src){
+    //number of times we need to relax the edges is v-1
     int turns=v-1;
     vector<int>dist(v,INF);
     dist[src]=0;
     while(turns--){
         for(int i=0;i<v;i++){
             for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
+                u=i;
+                int v=edge.F;
+                int wt=edge.S;
+                if(dist[u]!=INF && dist[u]+wt<dist[v]){
+                    dist[v]=dist[u]+wt;
                 }
             }
         }
     }
-    int found=false;
-    int x=-1;
+    //check for negative weight cycle
     for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
+        for(auto edge:adj[i]){
+            u=i;
+            int v=edge.F;
+            int wt=edge.S;
+            if(dist[u]!=INF && dist[u]+wt<dist[v]){
+                cout << "Negative weight cycle detected!" << endl;
+                return;
             }
-    }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
         }
     }
-    else{
-        cout<<"NO"<<endl;
-    }
-    return found;
+   
 }
 // Solve function for each test case
 void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
-    }
-    cycle(v,adj,0);
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (auto &x : a) cin >> x;
+
+    sort(all(a));
+    debug(a);
+
+    cout << "Sorted: ";
+    for (int x : a) cout << x << ' ';
+    cout << '\n';
 }
 
 // Main

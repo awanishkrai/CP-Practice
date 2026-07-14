@@ -60,71 +60,98 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
-    int turns=v-1;
-    vector<int>dist(v,INF);
-    dist[src]=0;
-    while(turns--){
-        for(int i=0;i<v;i++){
-            for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
-                }
+
+// 🔗 Disjoint Set Union (DSU) Snippet - Path Compression + Union by Rank
+
+class DSU {
+private:
+    std::vector<int> parent, rank;
+
+public:
+    // Initialize DSU for n elements (0-based index)
+    DSU(int n) {
+        parent.resize(n);
+        rank.assign(n, 0);
+        for (int i = 0; i < n; ++i)
+            parent[i] = i;
+    }
+
+    // Find representative (with path compression)
+    int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    // Union two sets by rank
+    bool unionSets(int x, int y) {
+        int xr = find(x);
+        int yr = find(y);
+        if (xr == yr)
+            return false; // Already connected
+
+        if (rank[xr] < rank[yr])
+            parent[xr] = yr;
+        else if (rank[xr] > rank[yr])
+            parent[yr] = xr;
+        else {
+            parent[yr] = xr;
+            rank[xr]++;
+        }
+        return true;
+    }
+};
+bool bfs(int start, vector<vector<int>>& adj, vector<bool>& visited) {
+    queue<int> q;
+    q.push(start);
+    visited[start] = true;
+vector<int>parent(adj.size(), -1);
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+
+        for (int neighbor : adj[node]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                parent[neighbor] = node;
+                q.push(neighbor);
+            }
+            else if(parent[node]!=neighbor){
+                return false; 
             }
         }
     }
-    int found=false;
-    int x=-1;
-    for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
-            }
-    }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
-        }
-    }
-    else{
-        cout<<"NO"<<endl;
-    }
-    return found;
+    return true; // No cycle detected
 }
+
 // Solve function for each test case
 void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
+    int n;
+    cin >> n;
+    vector<vector<int>>edges(n);
+    vector<vector<int>>adj(n);
+    for(int i=0;i<n-1;i++){
+        int u,v;
+        cin >> u>>v;
+        u--;v--;
+        edges[i]={u,v};
+        adj[u].pb(v);
+        adj[v].pb(u);
     }
-    cycle(v,adj,0);
+    DSU dsu(n);
+    int count=0;
+    for(int i=0;i<n-1;i++){
+        if(dsu.unionSets(edges[i][0], edges[i][1]))
+    }
+for(int i=0;i<n;i++){
+    if(dsu.find(i)==0){
+        dsu.unionSets(0,i);
+        if(!bfs(i,adj,vector<bool>(n,false))){
+            count++;
+        }
+    }
+}
+cout << count << endl;
 }
 
 // Main

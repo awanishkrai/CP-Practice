@@ -60,71 +60,47 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
-    int turns=v-1;
-    vector<int>dist(v,INF);
-    dist[src]=0;
-    while(turns--){
-        for(int i=0;i<v;i++){
-            for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
-                }
-            }
-        }
+vector<int>memo;
+int recur(int i,int n,vector<int>&a,vector<int>&d){
+    if(i==n-1){
+        return 0;
     }
-    int found=false;
-    int x=-1;
-    for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
-            }
+    if(i>=n){
+        return INF;
     }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
-        }
+    if(memo[i]!=-1){
+        return memo[i];
+    }
+    int ans=INF;
+    if(a[i]==0 || d[i]==0){
+        ans=min(ans,min(recur(i+1,n,a,d),recur(i+2,n,a,d)));
     }
     else{
-        cout<<"NO"<<endl;
+        ans=min(ans,min(1+recur(i+1,n,a,d),1+recur(i+2,n,a,d)));
     }
-    return found;
+    return memo[i]=ans;
 }
 // Solve function for each test case
+
+
 void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
+    int n;
+    cin >> n;
+    vector<int> a(n);
+   vector<int>d(n);
+    for(int i=0;i<n;i++){
+        cin>>a[i];
     }
-    cycle(v,adj,0);
+    for(int i=0;i<n;i++){
+        cin>>d[i];
+    }
+    memo.assign(n,-1);
+    if(a[n-1]==0 || d[n-1]==0 ){
+         cout<<recur(0,n,a,d)<<endl;
+    }
+    else{
+        cout<<1+recur(0,n,a,d)<<endl;
+    }
 }
 
 // Main

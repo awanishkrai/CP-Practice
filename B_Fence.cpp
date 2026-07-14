@@ -110,3 +110,45 @@ int32_t main() {
 
     return 0;
 }
+
+
+// 🔗 Disjoint Set Union (DSU) Snippet - Path Compression + Union by Rank
+
+class DSU {
+private:
+    std::vector<int> parent, rank;
+
+public:
+    // Initialize DSU for n elements (0-based index)
+    DSU(int n) {
+        parent.resize(n);
+        rank.assign(n, 0);
+        for (int i = 0; i < n; ++i)
+            parent[i] = i;
+    }
+
+    // Find representative (with path compression)
+    int find(int x) {
+        if (parent[x] != x)
+            parent[x] = find(parent[x]);
+        return parent[x];
+    }
+
+    // Union two sets by rank
+    bool unionSets(int x, int y) {
+        int xr = find(x);
+        int yr = find(y);
+        if (xr == yr)
+            return false; // Already connected
+
+        if (rank[xr] < rank[yr])
+            parent[xr] = yr;
+        else if (rank[xr] > rank[yr])
+            parent[yr] = xr;
+        else {
+            parent[yr] = xr;
+            rank[xr]++;
+        }
+        return true;
+    }
+};

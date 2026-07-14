@@ -60,71 +60,54 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
-    int turns=v-1;
-    vector<int>dist(v,INF);
-    dist[src]=0;
-    while(turns--){
-        for(int i=0;i<v;i++){
-            for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
-                }
+
+
+//claculating shortest path between two nodes
+void bfs(unordered_map<string,vector<string>>graph,string start,string end){
+    vector<string>path;
+    queue<{string,int}>q;
+    unordered_map<string,int>dist;
+    q.push({string,int});
+    unordered_map<string,string>parent;
+    q.push({source,0});
+    parent[source]="source";
+    while(!q.empty()){
+        auto[u,dis]=q.top();
+        q.pop();
+        path.push_back(u);
+        if(u==end){
+            while(u!=start){
+                u=parent[u];
+                path.push_back(parent[u]);
+            }
+            for(string str:path){
+                cout<<path<<" "<<endl;
+            }
+        }
+        for(string c:graph){
+            if(dist.find(u)!=dist.end() && dist[c]>dis+1){
+                dist[c]=dis+1;
+                parent[c]=u;
+                q.push({c,dis+1});
             }
         }
     }
-    int found=false;
-    int x=-1;
-    for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
-            }
-    }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
-        }
-    }
-    else{
-        cout<<"NO"<<endl;
-    }
-    return found;
+
 }
 // Solve function for each test case
 void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
+    //n is number of edges;
+    int n;
+    cin>>n;
+    string start,end;
+    cin>>start>>end;
+    unordered_map<string,vector<string>>mp;
+    while(n--){
+        string n1,n2;
+        cin>>n1>>n2;
+        mp[n1].push_back(n2);
     }
-    cycle(v,adj,0);
+    bfs(mp,start,end);
 }
 
 // Main

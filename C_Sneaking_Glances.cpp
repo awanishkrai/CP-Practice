@@ -60,71 +60,36 @@ int mod_pow(int a, int b, int m = MOD) {
 int mod_inv(int a, int m = MOD) {
     return mod_pow(a, m - 2, m);
 }
-bool cycle(int v,vector<vector<pair<int,int>>>&adj,int src){
-    vector<int>parents(v,-1);
-    int turns=v-1;
-    vector<int>dist(v,INF);
-    dist[src]=0;
-    while(turns--){
-        for(int i=0;i<v;i++){
-            for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    dist[vi]=dist[i]+w;
-                    parents[vi]=i;
-                }
-            }
-        }
+
+// Solve function for each test case
+//recur(i,start)= maximum passing zero if we choose -a[i] || a[i];
+vector<map<pair<int,bool>,int>> memo;
+
+int recur(int i,int start,bool ve,vector<int>&a){
+    if(i==(int)a.size())return 0;
+    auto key=make_pair(start,ve);
+    if(memo[i].count(key)) return memo[i][key];
+    if(ve && start-a[i]<0){
+        return memo[i][key]=max(1+recur(i+1,start-a[i],false,a),recur(i+1,start+a[i],true,a));
     }
-    int found=false;
-    int x=-1;
-    for(int i=0;i<v;i++){
-         for(auto edge:adj[i]){
-                int vi=edge.first;
-                int w=edge.second;
-                if(dist[i]!=INF && dist[i]+w<dist[vi]){
-                    found=true;
-                    x=vi;
-                }
-            }
+    else if(ve && start-a[i]>=0){
+        return memo[i][key]=max(recur(i+1,start-a[i],true,a),recur(i+1,start+a[i],true,a));
     }
-    if(found){
-        vector<int>cycle_nodes;
-        cout<<"YES"<<endl;
-        for(int i=0;i<v;i++){
-            x=parents[x];
-        }
-        cycle_nodes.push_back(x+1);
-        int k=x;
-        x=parents[x];
-        while(x!=k){
-            cycle_nodes.push_back(x+1);
-            x=parents[x];
-        }
-        cycle_nodes.push_back(k+1);
-        reverse(all(cycle_nodes));
-        for(int node:cycle_nodes){
-            cout<<node<<" ";
-        }
+    else if(!ve && start+a[i]>=0){
+        return memo[i][key]=max(1+recur(i+1,start+a[i],true,a),recur(i+1,start-a[i],false,a));
     }
     else{
-        cout<<"NO"<<endl;
+        return memo[i][key]=max(recur(i+1,start+a[i],false,a),recur(i+1,start-a[i],false,a));
     }
-    return found;
 }
-// Solve function for each test case
-void solve() {
-    int v,e;
-    cin>>v>>e;
-    vector<vector<pair<int,int>>>adj(v);
-    for(int i=0;i<e;i++){
-        int u,vi,wt;
-        cin>>u>>vi>>wt;
-        u--;vi--;
-        adj[u].push_back({vi,wt});
-    }
-    cycle(v,adj,0);
+
+void solve(){
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for(auto& x:a) cin>>x;
+    memo.assign(n+1,map<pair<int,bool>,int>());
+    cout<<recur(0,0,true,a)<<"\n";
 }
 
 // Main
