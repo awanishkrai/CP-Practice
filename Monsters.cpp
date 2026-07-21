@@ -64,36 +64,127 @@ bool isValid(vector<vector<char>>&labyrinth,int vi,int vj){
     if(labyrinth[vi][vj]!='#' && labyrinth[vi][vj]!='M')return true;
     return false;
 }
-void bfs(int ui,int uj,vector<vector<char>>&labyrinth){
+void bfs(int ui,int uj,vector<vector<char>>&labyrinth,int n,int m){
+    
     vector<vector<int>>moves={
         {0,1},
         {0,-1},
         {1,0},
         {-1,0}
     };
-    queue<pair<vector<int>,string>>q;
-    vector<vector<int>>dist(n,vector<int>moves);
-
-    q.push({{ui,uj},""});
-    dist[ui][uj]=0;
+    bool found=false;
     
-
+    queue<vector<int>>mq;
+    vector<vector<int>>monsterDist(n,vector<int>(m,INT_MAX));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(labyrinth[i][j]=='M'){
+                mq.push({0,i,j});
+                monsterDist[i][j]=0;
+            }
+        }
+    }
+    while(!mq.empty()){
+        auto tempNode=mq.front();
+        mq.pop();
+        int dis=tempNode[0];
+        int i=tempNode[1];
+        int j=tempNode[2];
+        for(auto x:moves){
+            int vi=i+x[0];
+            int vj=j+x[1];
+            if( vi>=0 && vi<n && vj>=0 && vj<m && isValid(labyrinth,vi,vj)){
+                if(dis+1<monsterDist[vi][vj]){
+                    monsterDist[vi][vj]=dis+1;
+                    mq.push({dis+1,vi,vj});
+                }
+            }
+        }
+    }
+    queue<vector<int>>pq;
+    vector<vector<int>>dist(n,vector<int>(m,INT_MAX));
+    vector<vector<pair<int ,int>>>parent(n,vector<pair<int,int>>(m,{-1,-1}));
+    int endi=-1;
+    int endj=-1;
+    pq.push({0,ui,uj});
+    dist[ui][uj]=0;
+    while(!pq.empty()){
+        auto node=pq.front();
+        int dis=node[0];
+        int i=node[1];
+        int j=node[2];
+        pq.pop();
+        if(i==0 || i==labyrinth.size()-1 || j==0 || j==labyrinth[0].size()-1){
+            cout<<"YES"<<endl;
+            cout<<dis<<endl;
+            found=true;
+            endi=i;
+            endj=j;
+            break;
+        }
+        for(auto temp:moves){
+            int vi=i+temp[0];
+            int vj=j+temp[1];
+            if(isValid(labyrinth,vi,vj)){
+                if(dist[vi][vj]>dist[i][j]+1 && dist[i][j]+1<monsterDist[vi][vj]){
+                    pq.push({dis+1,vi,vj});
+                    dist[vi][vj]=dis+1;
+                    parent[vi][vj]={i,j};
+                }
+            }
+        }
+    }
+    if(found){
+    string path="";
+    
+    while(labyrinth[endi][endj]!='A'){
+        auto [tempi,tempj]=parent[endi][endj];
+        if(tempi>endi){
+            path+='U';
+        } 
+        else if(tempi<endi){
+            path+='D';
+        }
+        else if(tempj>endj){
+            path+='L';
+        }
+        else if(tempj<endj){
+            path+='R';
+        }
+        endi=tempi;
+        endj=tempj;
+    }
+    reverse(path.begin(),path.end());
+    for(char c:path){
+        cout<<c;
+    }
+}
+else{
+    cout<<"NO"<<endl;
+}
 }
 
 
 // Solve function for each test case
 void solve() {
-    int n;
-    cin >> n;
-    vector<int> a(n);
-    for (auto &x : a) cin >> x;
-
-    sort(all(a));
-    debug(a);
-
-    cout << "Sorted: ";
-    for (int x : a) cout << x << ' ';
-    cout << '\n';
+    int n,m;
+    cin>>n>>m;
+    int starti=-1;
+    int startj=-1;
+    vector<vector<char>>labyrinth(n,vector<char>(m,'.'));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            char k='.';
+            cin>>k;
+            labyrinth[i][j]=k;
+            if(k=='A'){
+                starti=i;
+                startj=j;
+            }
+        }
+    }
+    bfs(starti,startj,labyrinth,n,m);
+    
 }
 
 // Main
